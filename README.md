@@ -14,7 +14,8 @@ A minimal, persistent note-taking Chrome extension designed for quick access and
 
 ## 📸 Screenshots
 
-> Add your extension screenshots here (1280x800 or 640x400)
+<img width="1437" height="754" alt="image" src="https://github.com/user-attachments/assets/0771880b-2c8d-4bdb-aa01-f65a8c653684" />
+
 
 ## 🛠️ Installation
 
