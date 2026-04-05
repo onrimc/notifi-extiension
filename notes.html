@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Note</title>
+  <link rel="stylesheet" href="notes.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <div class="visually-hidden" aria-hidden="true">
+          <button id="addNoteBtn" type="button" aria-label="Create a new note"></button>
+          <button id="notesViewBtn" type="button">Notes</button>
+          <button id="trashViewBtn" type="button">Trash</button>
+
+          <div class="sidebar-advanced" hidden>
+            <div class="sidebar-toolbar-row">
+              <label class="sort-control" for="sortSelect">
+                <span class="sort-label">Sort</span>
+                <select id="sortSelect" class="sort-select" aria-label="Sort notes">
+                  <option value="updated-desc">Recently updated</option>
+                  <option value="updated-asc">Oldest updated</option>
+                  <option value="title-asc">Title A–Z</option>
+                  <option value="title-desc">Title Z–A</option>
+                  <option value="pinned">Pinned first</option>
+                </select>
+              </label>
+
+              <button id="onlyTaggedBtn" class="mini-btn filter-btn" type="button" aria-pressed="false" title="Show only tagged notes">
+                Tagged only
+              </button>
+            </div>
+
+            <div class="quick-filters">
+              <button id="filterAllBtn" class="mini-btn filter-btn active" type="button">All</button>
+              <button id="filterPinnedBtn" class="mini-btn filter-btn" type="button">Pinned</button>
+              <button id="filterRecentBtn" class="mini-btn filter-btn" type="button">Recent</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-search-wrap">
+          <input
+            id="searchInput"
+            class="search-input"
+            type="search"
+            placeholder="Search notes..."
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="tag-filter-wrap visually-hidden" hidden aria-hidden="true">
+          <div class="tag-filter-head">
+            <span class="tag-filter-title">Tags</span>
+            <button id="clearTagFilterBtn" class="mini-btn" type="button">Clear</button>
+          </div>
+          <div id="tagFilterList" class="tag-filter-list"></div>
+        </div>
+
+        <div class="notes-list-wrap">
+          <div id="notesEmptyState" class="notes-empty-state" hidden>
+            <div class="empty-state-icon">📝</div>
+            <h2 class="empty-state-title">Your notes will appear here</h2>
+            <p class="empty-state-text">
+              Create your first note and start writing right away.
+            </p>
+            <div class="empty-state-actions">
+              <button id="emptyStateCreateBtn" class="toolbar-btn primary-btn" type="button">Create first note</button>
+            </div>
+          </div>
+
+          <div class="notes-section-stream">
+            <div id="notesList" class="notes-list"></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="editor-panel">
+      <section class="editor-content">
+        <div class="editor-card">
+          <div id="saveStatus" class="floating-save-status"></div>
+
+          <input
+            id="noteTitle"
+            class="note-title-input"
+            type="text"
+            placeholder="Title"
+            autocomplete="off"
+            maxlength="200"
+          />
+
+
+          <textarea
+            id="noteEditor"
+            class="note-editor"
+            placeholder="Start writing your note..."
+            spellcheck="true"
+          ></textarea>
+
+          <div class="editor-stats" aria-live="polite">
+            <button id="settingsBtn" class="mini-btn editor-stats-btn" type="button" aria-label="Open settings">Settings</button>
+            <button id="helpBtn" class="mini-btn editor-stats-btn" type="button" aria-label="Open help">Help</button>
+            <span id="wordCount" class="editor-stat">0 words</span>
+            <span id="characterCount" class="editor-stat">0 characters</span>
+            <button id="pinNoteBtn" class="mini-btn editor-stats-btn" type="button" aria-label="Pin active note">Pin</button>
+            <button id="deleteNoteBtn" class="mini-btn editor-stats-btn" type="button" aria-label="Delete active note">Delete</button>
+            <button id="restoreNoteBtn" class="mini-btn editor-stats-btn" type="button" aria-label="Restore selected note">Restore</button>
+            <button id="permanentDeleteBtn" class="mini-btn editor-stats-btn" type="button" aria-label="Permanently delete selected note">Delete forever</button>
+          </div>
+
+          <button id="trashDockBtn" class="trash-dock-btn" type="button" aria-label="Open trash">Trash</button>
+
+          <div id="trashDockPanel" class="trash-dock-panel" hidden>
+            <div class="trash-dock-head">
+              <div class="trash-dock-actions-left">
+                <button id="trashSelectBtn" class="mini-btn" type="button">Select</button>
+                <button id="trashSelectAllBtn" class="mini-btn" type="button" hidden>All</button>
+                <button id="trashRestoreBtn" class="mini-btn" type="button" hidden>Restore</button>
+              </div>
+              <button id="trashDeleteBtn" class="mini-btn danger-btn" type="button">Delete</button>
+            </div>
+            <div id="trashDockList" class="trash-dock-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="settingsModal" class="app-modal" hidden>
+    <div class="app-modal-backdrop" data-close-modal="settings"></div>
+    <section class="app-modal-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="app-modal-head">
+        <div>
+          <div class="app-modal-eyebrow">Preferences</div>
+          <h2 id="settingsTitle" class="app-modal-title">Settings</h2>
+        </div>
+        <button id="closeSettingsBtn" class="mini-btn" type="button" aria-label="Close settings">Close</button>
+      </div>
+
+      <div class="settings-list">
+        <label class="settings-item" for="themeSelect">
+          <span class="settings-label">Theme</span>
+          <select id="themeSelect" class="settings-select">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="system">System</option>
+          </select>
+        </label>
+
+        <label class="settings-item" for="dateFormatSelect">
+          <span class="settings-label">Date format</span>
+          <select id="dateFormatSelect" class="settings-select">
+            <option value="long">Long</option>
+            <option value="short">Short</option>
+          </select>
+        </label>
+
+        <label class="settings-item checkbox-item" for="confirmDeleteToggle">
+          <span class="settings-label">Confirm before delete</span>
+          <input id="confirmDeleteToggle" type="checkbox" checked />
+        </label>
+
+        <label class="settings-item checkbox-item" for="focusSearchOnOpenToggle">
+          <span class="settings-label">Focus search on open</span>
+          <input id="focusSearchOnOpenToggle" type="checkbox" />
+        </label>
+
+        <div class="settings-item">
+          <span class="settings-label">Data</span>
+          <div class="settings-actions-row">
+            <button id="exportBtn" class="mini-btn" type="button" aria-label="Export notes">Export</button>
+            <button id="importBtn" class="mini-btn" type="button" aria-label="Import notes">Import</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="helpModal" class="app-modal" hidden>
+    <div class="app-modal-backdrop" data-close-modal="help"></div>
+    <section class="app-modal-panel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="app-modal-head">
+        <div>
+          <div class="app-modal-eyebrow">Guide</div>
+          <h2 id="helpTitle" class="app-modal-title">How to use Note</h2>
+        </div>
+        <button id="closeHelpBtn" class="mini-btn" type="button" aria-label="Close help">Close</button>
+      </div>
+
+      <div class="help-content">
+        <div class="help-section">
+          <h3 class="help-section-title">Getting started</h3>
+          <p class="help-section-text">Create a note, add tags, and use search or sorting to find what you need faster.</p>
+        </div>
+        <div class="help-section">
+          <h3 class="help-section-title">Organization tips</h3>
+          <p class="help-section-text">Use short, consistent tags and pin the notes you revisit often.</p>
+        </div>
+        <div class="help-section">
+          <h3 class="help-section-title">Keyboard shortcuts</h3>
+          <ul class="help-shortcut-list">
+            <li><strong>Cmd/Ctrl + 4</strong> — Create a new note</li>
+            <li><strong>Cmd/Ctrl + F</strong> — Focus search</li>
+            <li><strong>Cmd/Ctrl + S</strong> — Save current note</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <input id="importFileInput" type="file" accept=".json,application/json" hidden />
+
+  <script src="notes.js" defer></script>
+</body>
+</html>
